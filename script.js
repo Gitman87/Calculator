@@ -39,6 +39,8 @@ const display = document.querySelector(".calc-display-container");
 const para = document.createElement("p");
 para.classList.add("calc-display");
 para.textContent = "";
+let argFlag = 0;
+let dotFlag = 0;
 
 
 // console.log(typeof display);
@@ -50,86 +52,38 @@ function displayInput(pressed) {
   console.log(typeof pressed);
   temporaryString += pressed;
   console.log(`temporary string:${temporaryString}`);
-  argFlag=0;
+  console.log(`displayInput flag ${ argFlag}`);
+  
 
   para.textContent += `${pressed}`;
   return display.appendChild(para);
 }
-let aArgument = "";
-let opArgument = "";
-let bArgument = "";
-let argFlag = 0;
-let dotFlag = 0;
 
-function appendOp(item) {
-  argFlag = 1;
-  aArgument = para.textContent.slice();
-  para.textContent = "";
-  temporaryString += item;
-  console.log(`Text content: ${para.textContent}`);
-  display.appendChild(para);
-  opArgument = item;
-  console.log(`opArgument: ${item}`);
-  //  argFlag=0;
-  return console.log(`aArgument: ${aArgument}`);
-}
-function equal(a, op) {
-  bArgument = para.textContent.slice();
-  console.log(`B argument:${bArgument}`);
-  let result = 0;
+
+
+function equal(string) {
+
+  //lear display
   para.textContent = "";
   display.appendChild(para);
-  console.log(`tempstring equal content: ${temporaryString}`);
-  switch (op) {
-    case "+":
-      result = parseFloat(a) + parseFloat(bArgument);
-      para.textContent = `${result}`;
-      console.log(`Result: ${result}`);
-      aArgument = "";
-      opArgument = "";
-      bArgument = "";
-      argFlag = 2;
-      return display.appendChild(para);
-
-    case "-":
-      result = parseFloat(a) - parseFloat(bArgument);
-      para.textContent = `${result}`;
-      console.log(`Result: ${result}`);
-      aArgument = "";
-      opArgument = "";
-      bArgument = "";
-      argFlag = 0;
-      return display.appendChild(para);
-    case "*":
-      result = parseFloat(a) * parseFloat(bArgument);
-      para.textContent = `${result}`;
-      console.log(`Result: ${result}`);
-      aArgument = "";
-      opArgument = "";
-      bArgument = "";
-      argFlag = 0;
-      return display.appendChild(para);
-    case "/":
-      result = parseFloat(a) / parseFloat(bArgument);
-      para.textContent = `${result}`;
-      console.log(`Result: ${result}`);
-      aArgument = "";
-      opArgument = "";
-      bArgument = "";
-      argFlag = 0;
-      return display.appendChild(para);
-    default:
-      console.log("Calculation error");
-  }
-  aArgument = "";
-  opArgument = "";
-  bArgument = "";
+  let result =  eval(string);
+  para.textContent=result;
+  display.appendChild(para);
+  console.log(temporaryString)
+  //
   argFlag = 0;
+  dotFlag = 0;
+  
 
-  // para.textContent= `${result}`;
-  // console.log(`Result: ${result}`);
-  // return display.appendChild(para);
-}
+
+   return console.log(result)
+  }
+  // aArgument = "";
+  // opArgument = "";
+  // bArgument = "";
+  // argFlag = 0;
+
+
 
 // Calculator logic===================================
 //button listener
@@ -139,94 +93,105 @@ const buttons = document.querySelectorAll(".digit-button");
 buttons.forEach((button) => {
   // console.log(button.id);
   button.addEventListener("click", () => {
-    if (argFlag === 0) {
+    
       switch (button.id) {
         case "seven":
+          argFlag=0;
           return displayInput(7);
 
         case "eight":
+          argFlag=0;
           return displayInput(8);
         case "nine":
+          argFlag=0;
           return displayInput(9);
         case "divide-button":
-          return appendOp("/");
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("/");}
         case "four":
+          argFlag=0;
           return displayInput(4);
         case "five":
+          argFlag=0;
           return displayInput(5);
         case "six":
+          argFlag=0;
           return displayInput(6);
         case "multiply-button":
-          return appendOp("*");
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("*");}
         case "one":
+          argFlag=0;
           return displayInput(1);
         case "two":
+          argFlag=0;
           return displayInput(2);
         case "three":
+          argFlag=0;
           return displayInput(3);
         case "plus":
-          return appendOp("+");
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("+");}
         case "minus-button":
-          return appendOp("-");
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("-");}
         case "zero":
+          argFlag=0;
           return displayInput(0);
         case "dot-button":
-          if (para.textContent.includes(".")) {
+          if (dotFlag>0) {
             break;
           } else {
+            dotFlag=1;
             return displayInput(".");
           }
 
-        // case "equal":
-        //   return displayInput('&#61;');
+         case "equal":
+          if(argFlag===0)
+          {
+            return equal(temporaryString);
+          }
+          else{
+            console.log("Error. Operator at the end of expression")
+          }
+          
         // case "plus":
         //   return  appendOp('+');
         default:
-          console.log("button error");
+          console.log("button error flag 0");
           break;
       }
-    } else if (argFlag === 1) {
-      switch (button.id) {
-        case "seven":
-          return displayInput(7);
+   
+      })
+    })
 
-        case "eight":
-          return displayInput(8);
-        case "nine":
-          return displayInput(9);
+   
+ 
 
-        case "four":
-          return displayInput(4);
-        case "five":
-          return displayInput(5);
-        case "six":
-          return displayInput(6);
-        case "one":
-          return displayInput(1);
-        case "two":
-          return displayInput(2);
-        case "three":
-          return displayInput(3);
-        case "zero":
-          return displayInput(0);
-        case "dot-button":
-          if (para.textContent.includes(".")) {
-            break;
-          } else {
-            return displayInput(".");
-          }
-        case "equal":
-          return equal(aArgument, opArgument);
-
-        default:
-          console.log("button error");
-          break;
-      }
-    }
-
-    // console.log(pressedButton);
-  });
-});
 // Side button functionallities=================================
 
 const clearButton = document.querySelector(".button-image-clear");
@@ -234,12 +199,9 @@ clearButton.addEventListener("click",()=>
 {
   para.textContent = "";
   display.appendChild(para);
-  aArgument = "";
-  opArgument = "";
-  bArgument = "";
   argFlag = 0;
   dotFlag = 0;
-  temporaryString = "";
+  temporaryString='';
 })
 
 const nightButton = document.querySelector(".button-image-night-mode");
