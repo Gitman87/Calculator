@@ -87,7 +87,7 @@ function equal(string) {
 
 // Calculator logic===================================
 //button listener
-const pressedButton = 0;
+
 const buttons = document.querySelectorAll(".digit-button");
 
 buttons.forEach((button) => {
@@ -189,7 +189,108 @@ buttons.forEach((button) => {
       })
     })
 
+//touch listener ===============================================
+buttons.forEach((button) => {
+  // console.log(button.id);
+  button.addEventListener("ontouchstart", () => {
+    
+      switch (button.id) {
+        case "seven":
+          argFlag=0;
+          return displayInput(7);
+
+        case "eight":
+          argFlag=0;
+          return displayInput(8);
+        case "nine":
+          argFlag=0;
+          return displayInput(9);
+        case "divide-button":
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("/");}
+        case "four":
+          argFlag=0;
+          return displayInput(4);
+        case "five":
+          argFlag=0;
+          return displayInput(5);
+        case "six":
+          argFlag=0;
+          return displayInput(6);
+        case "multiply-button":
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("*");}
+        case "one":
+          argFlag=0;
+          return displayInput(1);
+        case "two":
+          argFlag=0;
+          return displayInput(2);
+        case "three":
+          argFlag=0;
+          return displayInput(3);
+        case "plus":
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("+");}
+        case "minus-button":
+          if(argFlag===1)
+          {
+            break;
+          }
+          else
+          {dotFlag = 0;
+          argFlag=1;
+          return displayInput("-");}
+        case "zero":
+          argFlag=0;
+          return displayInput(0);
+        case "dot-button":
+          if (dotFlag>0) {
+            break;
+          } else {
+            dotFlag=1;
+            return displayInput(".");
+          }
+
+         case "equal":
+          if(argFlag===0)
+          {
+            return equal(temporaryString);
+          }
+          else{
+            console.log("Error. Operator at the end of expression")
+          }
+          
+        // case "plus":
+        //   return  appendOp('+');
+        default:
+          console.log("button error flag 0");
+          break;
+      }
    
+      })
+    })
+
+   
+ 
  
 
 // Side button functionallities=================================
