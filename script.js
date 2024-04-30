@@ -1,7 +1,8 @@
 // date
+const dateDisplay = document.querySelector(".date");
+const timeDisplay = document.querySelector(".time");
 function clock() {
-  const dateDisplay = document.querySelector(".date");
-  const timeDisplay = document.querySelector(".time");
+ 
   const today = new Date();
   let hours = (today.getHours() < 10 ? "0" : "") + today.getHours();
   let minutes = (today.getMinutes() < 10 ? "0" : "") + today.getMinutes();
@@ -39,10 +40,6 @@ const para = document.createElement("p");
 para.classList.add("calc-display");
 para.textContent = "";
 
-let a = "";
-let b = "";
-let op = "";
-let i = 0;
 
 // console.log(typeof display);
 // display.textContent='';
@@ -53,6 +50,7 @@ function displayInput(pressed) {
   console.log(typeof pressed);
   temporaryString += pressed;
   console.log(`temporary string:${temporaryString}`);
+  argFlag=0;
 
   para.textContent += `${pressed}`;
   return display.appendChild(para);
@@ -67,10 +65,12 @@ function appendOp(item) {
   argFlag = 1;
   aArgument = para.textContent.slice();
   para.textContent = "";
+  temporaryString += item;
   console.log(`Text content: ${para.textContent}`);
   display.appendChild(para);
   opArgument = item;
   console.log(`opArgument: ${item}`);
+  //  argFlag=0;
   return console.log(`aArgument: ${aArgument}`);
 }
 function equal(a, op) {
@@ -79,6 +79,7 @@ function equal(a, op) {
   let result = 0;
   para.textContent = "";
   display.appendChild(para);
+  console.log(`tempstring equal content: ${temporaryString}`);
   switch (op) {
     case "+":
       result = parseFloat(a) + parseFloat(bArgument);
@@ -87,7 +88,7 @@ function equal(a, op) {
       aArgument = "";
       opArgument = "";
       bArgument = "";
-      argFlag = 0;
+      argFlag = 2;
       return display.appendChild(para);
 
     case "-":
@@ -226,39 +227,47 @@ buttons.forEach((button) => {
     // console.log(pressedButton);
   });
 });
+// Side button functionallities=================================
 
-// test
-// const sevenButton= document.querySelector("#seven");
-// sevenButton.addEventListener("click", ()=>
-// {
-//   console.log("seven clicked");
-// })
-// Calculation========================================================
-//copied from Odin exercise
-function Calculator() {
-  this.methods = {
-    "-": (a, b) => a - b,
-    "+": (a, b) => a + b,
-    "&#215;": (a, b) => a * b,
-    "&#247;": (a, b) => a / b,
-  };
+const clearButton = document.querySelector(".button-image-clear");
+clearButton.addEventListener("click",()=>
+{
+  para.textContent = "";
+  display.appendChild(para);
+  aArgument = "";
+  opArgument = "";
+  bArgument = "";
+  argFlag = 0;
+  dotFlag = 0;
+  temporaryString = "";
+})
 
-  this.calculate = function (str) {
-    let split = str.split(" "),
-      a = +split[0],
-      op = split[1],
-      b = +split[2];
+const nightButton = document.querySelector(".button-image-night-mode");
+const body= document.querySelector("body");
+const led=document.querySelector(".red-led");
+let nightFlag=0;
 
-    if (!this.methods[op] || isNaN(a) || isNaN(b)) {
-      return NaN;
-    }
 
-    return this.methods[op](a, b);
-  };
-}
-let powerCalc = new Calculator();
-let result = powerCalc.calculate("2 + 3");
-// alert( result ); // 8
-//Displaying calculation===============================
 
-console.log(`Para ostatnie:${para}`);
+nightButton.addEventListener("click",()=>
+{ 
+  if(nightFlag===0)
+  {
+    body.setAttribute("style","filter: brightness(70%);background-color:black;");
+    para.setAttribute("style","filter: brightness(300%);text-shadow: 0px 0px 5px #14a8a4; ");
+    dateDisplay.setAttribute("style","filter: brightness(300%); text-shadow: 0px 0px 10px #14a8a4;");
+    timeDisplay.setAttribute("style","filter: brightness(300%); text-shadow: 0px 0px 10px #14a8a4;");
+    led.setAttribute("style", "background-color: red; filter: brightness(300%);box-shadow: 0px 0px 10px rgb(211, 138, 117);" );
+    nightFlag=1;
+  }
+  else
+  {
+    body.setAttribute("style","filter: brightness(100%);background-color:white;");
+    para.setAttribute("style","filter: brightness(100%)");
+    dateDisplay.setAttribute("style","filter: brightness(100%)");
+    timeDisplay.setAttribute("style","filter: brightness(100%)");
+    led.setAttribute("style",  "background-color: rgb(78, 1, 1); filter: brightness(100%);" );
+    nightFlag=0;
+  }
+})
+
